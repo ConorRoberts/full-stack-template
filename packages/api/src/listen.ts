@@ -4,7 +4,8 @@ import { server } from ".";
 (async () => {
   try {
     await server.listen({
-      port: process.env.PORT ? Number(process.env.PORT) : 4000,
+      host: process.env.HOST ?? "localhost",
+      port: Number(process.env.PORT ?? 4000),
     });
   } catch (err) {
     server.log.error(err);
