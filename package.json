@@ -7,7 +7,7 @@
     "dev": "turbo run dev",
     "test": "turbo run test",
     "build": "turbo run build",
-    "setup": "turbo run setup"
+    "postinstall": "turbo run postinstall"
   },
   "keywords": [],
   "author": "",
