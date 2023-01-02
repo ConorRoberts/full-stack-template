@@ -10,18 +10,15 @@ import TopNavigation from "~/components/TopNavigation";
 import BottomNavigation from "~/components/BottomNavigation";
 import LoadingScreen from "~/components/LoadingScreen";
 import { trpc } from "../utils/trpc";
-import { Amplify } from "aws-amplify";
-import amplifyConfig from "~/config/amplify";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
-Amplify.configure(amplifyConfig);
 const App: AppType = ({ Component, pageProps }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-
     // This is used to display a loading screen in transition
     // Helps for when we're fetching data from the server so the user has feedback in the meantime
     Router.events.on("routeChangeStart", () => {
@@ -33,7 +30,8 @@ const App: AppType = ({ Component, pageProps }) => {
     });
   }, []);
   return (
-    <>
+    <ClerkProvider {...pageProps}>
+      {/* Load the Inter font */}
       <style jsx global>
         {`
           html {
@@ -41,6 +39,7 @@ const App: AppType = ({ Component, pageProps }) => {
           }
         `}
       </style>
+
       <div
         className={
           "relative flex min-h-screen flex-col bg-gray-100 px-2 pb-24 pt-2 text-black dark:bg-gray-900 dark:text-white md:pt-[70px] md:pb-2"
@@ -51,7 +50,7 @@ const App: AppType = ({ Component, pageProps }) => {
         {drawerOpen && <NavigationDrawer setOpen={setDrawerOpen} open={drawerOpen} />}
         <BottomNavigation setDrawerOpen={setDrawerOpen} />
       </div>
-    </>
+    </ClerkProvider>
   );
 };
 

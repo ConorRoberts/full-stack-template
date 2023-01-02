@@ -24,11 +24,14 @@ generator zod {
   prismaJsonNullability = true // (default) uses prisma's scheme for JSON field nullability
 }
 
-model User {
-  id        String     @id @unique
-  email     String     @unique
-  name      String?
-  roles     String[]   @default(["user"])
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String
 
-  @@map("users")
+  @@index([id, createdAt, updatedAt, createdBy])
+  @@map("todos")
 }

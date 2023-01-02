@@ -6,7 +6,8 @@
     "start": "turbo run start",
     "dev": "turbo run dev",
     "test": "turbo run test",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "postinstall": "turbo run postinstall"
   },
   "keywords": [],
   "author": "",
@@ -24,3 +25,4 @@
     "typescript": "^4.6.4"
   }
 }
+

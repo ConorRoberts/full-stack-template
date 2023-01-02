@@ -8,6 +8,17 @@
     "start": {
       "dependsOn": ["^build"]
     },
-    "dev": {}
+    "dev": {},
+    "prisma#build": {
+      "outputs": ["client/**", "../common/src/models/**"]
+    },
+    "prisma#push": {},
+    "common#build": {
+      "dependsOn": ["prisma#build"],
+      "outputs": ["dist/**"]
+    },
+    "postinstall": {
+      "dependsOn": ["common#build", "prisma#push"]
+    }
   }
 }

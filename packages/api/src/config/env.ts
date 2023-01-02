@@ -7,21 +7,27 @@ export const ENV = z
   .object({
     ENVIRONMENT: z.enum(["dev", "prod", "test"]),
     STAGE: z.enum(["dev", "prod"]),
-    JWKS_URL: z.string().url(),
+    CLERK_API_KEY: z.string(),
+    CLIENT_URL: z.string(),
   })
   .parse({
     /**
-     * The current environment. Post-build environment will be "prod". In development, it will be "dev".
+     * Equivalent to NODE_ENV
      */
     ENVIRONMENT: process.env.NODE_ENV,
 
     /**
-     * The current stage. If set to "prod", we will be using production resources. If set to "dev", we will be using development resources.
+     * The current stage. Allows for differentiating between dev and prod environments.
      */
     STAGE: process.env.STAGE,
 
     /**
-     * The link to a JSON Web Key Set (JWKS) that contains the public keys used to verify the JWT signature.
+     * Secret key used to authenticate with Clerk.
      */
-    JWKS_URL: process.env.JWKS_URL,
+    CLERK_API_KEY: process.env.CLERK_API_KEY,
+
+    /**
+     * The URL of the client app (within ./packages/client)
+     */
+    CLIENT_URL: process.env.CLIENT_URL,
   });

@@ -15,6 +15,6 @@ server.register(fastifyTRPCPlugin, {
   trpcOptions: { router, createContext },
 });
 
-server.register(cors, {});
+server.register(cors, { origin: ["http://localhost:3000"], credentials: true });
 
 export { Router, server };

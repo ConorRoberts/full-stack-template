@@ -4,7 +4,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
 import { type Router } from "../../api/src/index";
-import { ENV } from "~/config/env";
+import { CLIENT_ENV } from "~/config/clientEnv";
 
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
@@ -16,8 +16,8 @@ export const trpc = createTRPCNext<Router>({
             process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: `${ENV.API_URL}/trpc`,
-          headers() {
+          url: `${CLIENT_ENV.API_URL}/trpc`,
+          headers: () => {
             if (ctx?.req) {
               // To use SSR properly, you need to forward the client's headers to the server
               // This is so you can pass through things like cookies when we're server-side rendering
@@ -34,6 +34,12 @@ export const trpc = createTRPCNext<Router>({
               };
             }
             return {};
+          },
+          fetch: (url, options) => {
+            return fetch(url, {
+              ...options,
+              credentials: "include",
+            });
           },
         }),
       ],

@@ -1,15 +1,9 @@
-export type DecodedJwt = {
-  sub: string;
-  "cognito:groups": string[];
-  iss: string;
-  version: number;
-  client_id: string;
-  origin_jti: string;
-  token_use: string;
-  scope: string;
-  auth_time: number;
+export interface DecodedJwt {
+  azp: string;
   exp: number;
   iat: number;
-  jti: string;
-  username: string;
-};
+  iss: string;
+  nbf: number;
+  sid: string;
+  sub: string;
+}

@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .small-screen-nav-button {
+    @apply primary-hover primary-hover flex flex-col items-center gap-1 px-4 pt-2 pb-6 text-sm font-medium;
+  }
+
+  .small-screen-nav-button-icon {
+    @apply h-7 w-7;
+  }
+
+  .big-screen-nav-button {
+    @apply primary-hover flex flex-col items-center gap-1 py-2 px-2 font-medium;
+  }
+
+  .primary-hover {
+    @apply cursor-pointer text-black transition  hover:text-gray-700 dark:text-white dark:hover:text-gray-300;
+  }
+
+  .background-hover {
+    @apply cursor-pointer rounded-sm transition hover:bg-gray-100 dark:hover:bg-gray-500;
+  }
+
+  .nav-drawer-button {
+    @apply background-hover flex items-center gap-4 py-3 px-6 dark:text-white;
+  }
+}
