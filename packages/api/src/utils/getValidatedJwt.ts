@@ -5,5 +5,6 @@ import { JWKS } from "../config/jwks";
 export const getValidatedJwt = async (token: string) => {
   const { payload } = await jwtVerify(token, JWKS);
 
-  return payload as DecodedJwt
+  // Wacky typecast because the JWT from Clerk is not the same format as the expected type returned by "jwtVerify"
+  return payload as unknown as DecodedJwt
 };

@@ -17,7 +17,7 @@
       "dependsOn": ["prisma#build"],
       "outputs": ["dist/**"]
     },
-    "postinstall": {
+    "setup": {
       "dependsOn": ["common#build", "prisma#push"]
     }
   }
