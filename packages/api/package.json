@@ -2,12 +2,12 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev onchange -i -k \"src/**\" \".env\" \"tsconfig.json\" -- ts-node -r dotenv/config src/listen.ts",
-    "start": "cross-env NODE_ENV=prod node dist/index.js",
+    "start": "cross-env NODE_ENV=prod node dist/listen.js",
     "test": "vitest",
-    "build": "tsc --noEmit"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
