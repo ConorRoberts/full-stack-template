@@ -4,6 +4,7 @@ import type { Router } from "./trpc/router";
 import { mainRouter as router } from "./trpc/router";
 import { createContext } from "./trpc/context";
 import cors from "@fastify/cors";
+import { ENV } from "./config/env";
 
 const server = fastify({
   maxParamLength: 5000,
@@ -15,6 +16,6 @@ server.register(fastifyTRPCPlugin, {
   trpcOptions: { router, createContext },
 });
 
-server.register(cors, { origin: ["http://localhost:3000"], credentials: true });
+server.register(cors, { origin: [ENV.CLIENT_URL], credentials: true });
 
 export { Router, server };
