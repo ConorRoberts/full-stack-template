@@ -1,0 +1,29 @@
+{
+  "name": "@workspace/prisma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./client/index.js",
+  "types": "./client/index.d.ts",
+  "files": [
+    "client"
+  ],
+  "scripts": {
+    "migrate:dev": "prisma migrate dev -n Update",
+    "migrate:prod": "prisma migrate deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.6.2",
+    "prisma": "^4.3.1",
+    "typescript": "^4.7.4",
+    "zod-prisma": "^0.5.4"
+  }
+}
