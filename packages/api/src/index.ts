@@ -17,9 +17,10 @@ server.register(fastifyTRPCPlugin, {
 });
 
 server.register(cors, {
-  origin: [ENV.CLIENT_URL],
+  origin: true,
   credentials: true,
-  allowedHeaders: ["Content-Type", "Cookie", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  methods: ["*"],
 });
 
 export { Router, server };
