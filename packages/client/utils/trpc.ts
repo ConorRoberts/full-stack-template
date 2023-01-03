@@ -39,6 +39,7 @@ export const trpc = createTRPCNext<Router>({
             return fetch(url, {
               ...options,
               credentials: "include",
+              mode: "cors",
             });
           },
         }),
