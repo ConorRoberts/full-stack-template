@@ -7,6 +7,8 @@ import { z } from "zod";
 import cookie from "cookie";
 import { PrismaClient } from "prisma";
 
+const prisma = new PrismaClient();
+
 /**
  * @link https://trpc.io/docs/context
  **/
@@ -14,7 +16,6 @@ export const createContext = async (opts: CreateFastifyContextOptions) => {
   const { req, res } = opts;
 
   let user: DecodedJwt | null = null;
-  const prisma = new PrismaClient();
 
   if (req.headers.cookie) {
     const token = z.coerce.string().optional().parse(cookie.parse(req.headers.cookie)["__session"]);
