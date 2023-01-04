@@ -1,16 +1,12 @@
 import { trpc } from "~/utils/trpc";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Button } from "@conorroberts/beluga";
 import { CloseIcon } from "~/components/Icons";
 
 const Page = () => {
   const utils = trpc.useContext();
   const { user } = useUser();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user),trpc:{
-    context:{
-      stinky:"monkey"
-    }
-  } });
+  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
 
   const { mutate } = trpc.todo.createTodo.useMutation({
     onSuccess: () => {
@@ -25,7 +21,7 @@ const Page = () => {
 
   return (
     <>
-      <SignedIn>
+      {user && (
         <div className="flex flex-col">
           <Button size="medium" color="green" onClick={() => mutate()} className="ml-auto">
             Create Todo
@@ -45,13 +41,10 @@ const Page = () => {
             ))}
           </div>
         </div>
-      </SignedIn>
-      <SignedOut>
-        <p className="my-8 text-center">You must be signed in to view this page.</p>
-      </SignedOut>
+      )}
+      {!user && <p className="my-8 text-center">You must be signed in to view this page.</p>}
     </>
   );
 };
 
 export default Page;
-

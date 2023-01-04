@@ -5,6 +5,7 @@ import { type DecodedJwt } from "../types/DecodedJwt";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { PrismaClient } from "prisma";
+import cookie from "cookie";
 
 const prisma = new PrismaClient();
 
@@ -16,14 +17,15 @@ export const createContext = async (opts: CreateFastifyContextOptions) => {
 
   let user: DecodedJwt | null = null;
 
-  if (req.headers.authorization) {
-    const token = z.coerce.string().optional().parse(req.headers.authorization.slice(7));
-    // const token = z.coerce.string().optional().parse(cookie.parse(req.headers.cookie)["__session"]);
+  if (req.headers.cookie) {
+    const token = z.coerce.string().optional().parse(cookie.parse(req.headers.cookie)["appSession"]);
 
     if (token) {
       try {
+        console.log(token);
         user = await getValidatedJwt(token);
       } catch (error) {
+        console.error(error);
         throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" });
       }
     }

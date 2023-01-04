@@ -1,11 +1,14 @@
 import { SignIn, useClerk,  } from "@clerk/nextjs";
+import Link from "next/link";
 
 const Page = () => {
   const clerk  =useClerk();
 
   return (
     <div className="flex justify-center flex-1 items-center">
-      <SignIn />
+      <Link href="/api/auth/login">
+        Login
+      </Link>
     </div>
   );
 };
