@@ -5,7 +5,6 @@ import superjson from "superjson";
 
 import { type Router } from "../../api/src/index";
 import { CLIENT_ENV } from "~/config/clientEnv";
-import { useAuthStore } from "~/store/authStore";
 
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
@@ -18,7 +17,7 @@ export const trpc = createTRPCNext<Router>({
         }),
         httpBatchLink({
           url: `${CLIENT_ENV.API_URL}/trpc`,
-          headers: () => {
+          headers: async () => {
             if (ctx?.req) {
               // To use SSR properly, you need to forward the client's headers to the server
               // This is so you can pass through things like cookies when we're server-side rendering
@@ -34,7 +33,8 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            return { Authorization: `Bearer ${useAuthStore.getState().token}` };
+            const { token } = await fetch("/api/token").then((res) => res.json());
+            return { Authorization: `Bearer ${token}` };
           },
           fetch: (url, options) => {
             return fetch(url, {
