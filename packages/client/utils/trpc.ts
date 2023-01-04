@@ -5,6 +5,7 @@ import superjson from "superjson";
 
 import { type Router } from "../../api/src/index";
 import { CLIENT_ENV } from "~/config/clientEnv";
+import { useAuthStore } from "~/store/authStore";
 
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
@@ -33,13 +34,12 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            return {};
+            return { Authorization: `Bearer ${useAuthStore.getState().token}` };
           },
           fetch: (url, options) => {
             return fetch(url, {
               ...options,
               credentials: "include",
-              mode: "cors",
             });
           },
         }),

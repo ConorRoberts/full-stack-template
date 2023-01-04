@@ -4,7 +4,6 @@ import { getValidatedJwt } from "../utils/getValidatedJwt";
 import { type DecodedJwt } from "../types/DecodedJwt";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import cookie from "cookie";
 import { PrismaClient } from "prisma";
 
 const prisma = new PrismaClient();
@@ -17,8 +16,9 @@ export const createContext = async (opts: CreateFastifyContextOptions) => {
 
   let user: DecodedJwt | null = null;
 
-  if (req.headers.cookie) {
-    const token = z.coerce.string().optional().parse(cookie.parse(req.headers.cookie)["__session"]);
+  if (req.headers.authorization) {
+    const token = z.coerce.string().optional().parse(req.headers.authorization.slice(7));
+    // const token = z.coerce.string().optional().parse(cookie.parse(req.headers.cookie)["__session"]);
 
     if (token) {
       try {

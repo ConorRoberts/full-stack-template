@@ -6,7 +6,11 @@ import { CloseIcon } from "~/components/Icons";
 const Page = () => {
   const utils = trpc.useContext();
   const { user } = useUser();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
+  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user),trpc:{
+    context:{
+      stinky:"monkey"
+    }
+  } });
 
   const { mutate } = trpc.todo.createTodo.useMutation({
     onSuccess: () => {
