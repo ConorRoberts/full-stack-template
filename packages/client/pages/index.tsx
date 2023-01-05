@@ -1,25 +1,26 @@
 import { trpc } from "~/utils/trpc";
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { Button } from "@conorroberts/beluga";
-import { CloseIcon } from "~/components/Icons";
+import { CloseIcon, LoadingIcon } from "~/components/Icons";
 
 const Page = () => {
   const utils = trpc.useContext();
   const { user } = useUser();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user),trpc:{
-    context:{
-      stinky:"monkey"
-    }
-  } });
+  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
 
-  const { mutate } = trpc.todo.createTodo.useMutation({
-    onSuccess: () => {
-      utils.todo.getAllTodos.refetch();
+  const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
+    onSuccess: async () => {
+      await utils.todo.getAllTodos.refetch();
     },
   });
   const { mutate: deleteTodo } = trpc.todo.deleteTodo.useMutation({
-    onSuccess: () => {
-      utils.todo.getAllTodos.refetch();
+    onMutate: ({ todoId }) => {
+      utils.todo.getAllTodos.setData(undefined, (prev) => {
+        return prev?.filter((e) => e.id !== todoId) ?? prev;
+      });
+    },
+    onSuccess: async () => {
+      await utils.todo.getAllTodos.refetch();
     },
   });
 
@@ -28,7 +29,8 @@ const Page = () => {
       <SignedIn>
         <div className="flex flex-col">
           <Button size="medium" color="green" onClick={() => mutate()} className="ml-auto">
-            Create Todo
+            <p>Create Todo</p>
+            {createLoading && <LoadingIcon className="animate-spin" />}
           </Button>
           <div className="flex flex-col gap-1 mx-auto w-full max-w-3xl">
             {todos.map((e) => (
@@ -54,4 +56,3 @@ const Page = () => {
 };
 
 export default Page;
-
