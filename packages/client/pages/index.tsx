@@ -19,7 +19,7 @@ const Page = () => {
         return prev?.filter((e) => e.id !== todoId) ?? prev;
       });
     },
-    onSuccess: async () => {
+    onError: async () => {
       await utils.todo.getAllTodos.refetch();
     },
   });

@@ -34,7 +34,7 @@ export const trpc = createTRPCNext<Router>({
               };
             }
             const { token } = await fetch("/api/token").then((res) => res.json());
-            return { Authorization: `Bearer ${token}` };
+            return { Authorization: `Bearer ` };
           },
         }),
       ],
