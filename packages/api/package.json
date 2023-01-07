@@ -17,6 +17,7 @@
     "@fastify/cors": "^8.2.0",
     "@prisma/client": "^4.8.0",
     "@trpc/server": "^10.7.0",
+    "auth0": "^3.0.1",
     "cookie": "^0.5.0",
     "dayjs": "^1.11.6",
     "fastify": "^4.10.2",

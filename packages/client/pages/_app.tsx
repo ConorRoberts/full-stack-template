@@ -10,7 +10,7 @@ import TopNavigation from "~/components/TopNavigation";
 import BottomNavigation from "~/components/BottomNavigation";
 import LoadingScreen from "~/components/LoadingScreen";
 import { trpc } from "../utils/trpc";
-import { ClerkProvider } from "@clerk/nextjs";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +30,7 @@ const App: AppType = ({ Component, pageProps }) => {
     });
   }, []);
   return (
-    <ClerkProvider {...pageProps}>
+    <UserProvider>
       {/* Load the Inter font */}
       <style jsx global>
         {`
@@ -50,7 +50,7 @@ const App: AppType = ({ Component, pageProps }) => {
         {drawerOpen && <NavigationDrawer setOpen={setDrawerOpen} open={drawerOpen} />}
         <BottomNavigation setDrawerOpen={setDrawerOpen} />
       </div>
-    </ClerkProvider>
+    </UserProvider>
   );
 };
 

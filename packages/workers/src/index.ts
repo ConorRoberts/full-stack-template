@@ -16,6 +16,7 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
   "Access-Control-Allow-Methods": "POST,GET,OPTIONS,DELETE,PUT",
   "Access-Control-Allow-Headers": "Content-Type,Authorization",
+  "Access-Control-Allow-Credentials": "true",
 };
 
 export interface Env {
@@ -41,14 +42,15 @@ export default {
       req: request,
       router: mainRouter,
       responseMeta: ({ errors }) => {
-        if (errors.length > 0) {
-          return {
-            headers: {
-              ...CORS_HEADERS,
-            },
-            status: errors[0].code === "UNAUTHORIZED" ? 401 : 500,
-          };
-        }
+        console.log(errors);
+        // if (errors.length > 0) {
+        //   return {
+        //     headers: {
+        //       ...CORS_HEADERS,
+        //     },
+        //     status: errors[0].code === "UNAUTHORIZED" ? 401 : 500,
+        //   };
+        // }
         return {
           headers: {
             ...CORS_HEADERS,

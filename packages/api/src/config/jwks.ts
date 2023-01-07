@@ -1,7 +1,5 @@
 import { createRemoteJWKSet } from "jose";
-import { ENV } from "./env";
 
-export const JWKS = createRemoteJWKSet(new URL("https://api.clerk.dev/v1/jwks"), {
-  headers: { Authorization: `Bearer ${ENV.CLERK_API_KEY}` },
+export const JWKS = createRemoteJWKSet(new URL("https://conorroberts.us.auth0.com/.well-known/jwks.json"), {
   cacheMaxAge: 60 * 5 * 1000, // 5 mins
 });
