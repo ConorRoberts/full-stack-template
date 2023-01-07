@@ -1,5 +1,5 @@
 import { httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
+import { createTRPCNext,withTRPC } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
@@ -33,8 +33,14 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            const { token } = await fetch("/api/token").then((res) => res.json());
-            return { Authorization: `Bearer ` };
+            // const { token } = await fetch("/api/token").then((res) => res.json());
+            return {};
+          },
+          fetch: (url, options) => {
+            return fetch(url, {
+              ...options,
+              credentials: "include",
+            });
           },
         }),
       ],

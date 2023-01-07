@@ -1,4 +1,4 @@
-import { ulid } from "ulid";
+import { nanoid } from "nanoid";
 import { protectedProcedure, router } from "../trpc";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ export const todoRouter = router({
     const newTodo = await prisma.todo.create({
       data: {
         createdBy: user.sub,
-        title: `${ulid()} New Todo`,
+        title: `${nanoid()} New Todo`,
         completed: false,
       },
     });

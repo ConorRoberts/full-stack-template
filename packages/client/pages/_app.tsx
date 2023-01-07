@@ -55,4 +55,3 @@ const App: AppType = ({ Component, pageProps }) => {
 };
 
 export default trpc.withTRPC(App);
-

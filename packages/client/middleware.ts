@@ -1,10 +1,17 @@
-import { withClerkMiddleware } from "@clerk/nextjs/server";
+import { getAuth, withClerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import type { NextRequest } from 'next/server'
+import type { NextRequest } from "next/server";
 
-export default withClerkMiddleware((req: NextRequest) => {
-  return NextResponse.next();
+const handler = withClerkMiddleware(async (req: NextRequest) => {
+  const { getToken } = getAuth(req);
+  
+  const headers = new Headers(req.headers);
+  headers.set("authorization", `Bearer ${await getToken()}`);
+  return NextResponse.next({ request: { headers } });
 });
 
-// Stop Middleware running on static files
-export const config = { matcher: '/((?!.*\\.).*)' }
+export const config = {
+  runtime: "edge",
+};
+
+export default handler;
