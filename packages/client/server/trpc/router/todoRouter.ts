@@ -36,4 +36,18 @@ export const todoRouter = router({
         },
       });
     }),
+  reportLatency: protectedProcedure
+    .input(z.object({ todoId: z.number(), latency: z.number() }))
+    .mutation(async ({ ctx: { prisma, user }, input }) => {
+      const { todoId, latency } = input;
+      await prisma.todo.updateMany({
+        where: {
+          id: todoId,
+          createdBy: user.id,
+        },
+        data: {
+          creationLatency: latency,
+        },
+      });
+    }),
 });

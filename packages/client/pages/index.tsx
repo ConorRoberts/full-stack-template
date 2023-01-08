@@ -9,14 +9,34 @@ const Page = () => {
   const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
 
   const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
-    onSuccess: async () => {
-      await utils.todo.getAllTodos.refetch();
+    onSuccess: async (newTodo) => {
+      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
+        prev.push(newTodo);
+        return prev;
+      });
+
+      const creationLatency = Date.now() - newTodo.createdAt.getTime();
+      await utils.client.todo.reportLatency.mutate({
+        todoId: newTodo.id,
+        latency: creationLatency,
+      });
+
+      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
+        const todoIndex = prev.findIndex((e) => e.id === newTodo.id);
+
+        // Couldn't find todo
+        if (todoIndex === -1) return prev;
+
+        prev[todoIndex].creationLatency = creationLatency;
+
+        return prev;
+      });
     },
   });
   const { mutate: deleteTodo } = trpc.todo.deleteTodo.useMutation({
     onMutate: ({ todoId }) => {
-      utils.todo.getAllTodos.setData(undefined, (prev) => {
-        return prev?.filter((e) => e.id !== todoId) ?? prev;
+      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
+        return prev.filter((e) => e.id !== todoId);
       });
     },
     onError: async () => {
@@ -42,7 +62,9 @@ const Page = () => {
                   <CloseIcon size={20} />
                 </span>
                 <p className="font-semibold text-sm">{e.title}</p>
-                <p className="text-xs text-gray-400">Created {e.createdAt.toLocaleString()}</p>
+                <p className="text-xs text-gray-400">
+                  Created at {e.createdAt.toLocaleString()} {e.creationLatency !== null && `in ${e.creationLatency}ms`}
+                </p>
               </div>
             ))}
           </div>

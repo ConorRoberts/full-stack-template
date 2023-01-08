@@ -7,4 +7,5 @@ export const TodoModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   createdBy: z.string(),
+  creationLatency: z.number().nullish(),
 })

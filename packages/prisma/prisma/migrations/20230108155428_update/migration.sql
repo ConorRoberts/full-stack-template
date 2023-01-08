@@ -1,11 +1,12 @@
 -- CreateTable
 CREATE TABLE "todos" (
-    "id" INT4 NOT NULL DEFAULT unique_rowid(),
-    "title" STRING NOT NULL,
-    "completed" BOOL NOT NULL DEFAULT false,
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "completed" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "createdBy" STRING NOT NULL,
+    "createdBy" TEXT NOT NULL,
+    "creationLatency" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "todos_pkey" PRIMARY KEY ("id")
 );
