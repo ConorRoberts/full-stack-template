@@ -1,10 +1,23 @@
 import { httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCNext,withTRPC } from "@trpc/next";
+import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
-import { type Router } from "../../api/src/index";
-import { CLIENT_ENV } from "~/config/clientEnv";
+import { type Router } from "../server/trpc/router/mainRouter";
+
+const getBaseUrl = () => {
+  if (typeof window !== "undefined")
+    // browser should use relative path
+    return "";
+  if (process.env.VERCEL_URL)
+    // reference for vercel.com
+    return `https://${process.env.VERCEL_URL}`;
+  if (process.env.RENDER_INTERNAL_HOSTNAME)
+    // reference for render.com
+    return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
+  // assume localhost
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+};
 
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
@@ -16,7 +29,7 @@ export const trpc = createTRPCNext<Router>({
             process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: `${CLIENT_ENV.API_URL}/trpc`,
+          url: `${getBaseUrl()}/api/trpc`,
           headers: async () => {
             if (ctx?.req) {
               // To use SSR properly, you need to forward the client's headers to the server
@@ -33,14 +46,7 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            // const { token } = await fetch("/api/token").then((res) => res.json());
             return {};
-          },
-          fetch: (url, options) => {
-            return fetch(url, {
-              ...options,
-              credentials: "include",
-            });
           },
         }),
       ],

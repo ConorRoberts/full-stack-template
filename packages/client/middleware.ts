@@ -3,15 +3,18 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const handler = withClerkMiddleware(async (req: NextRequest) => {
-  const { getToken } = getAuth(req);
-  
-  const headers = new Headers(req.headers);
-  headers.set("authorization", `Bearer ${await getToken()}`);
-  return NextResponse.next({ request: { headers } });
-});
+  const { userId } = getAuth(req);
 
-export const config = {
-  runtime: "edge",
-};
+  const requestHeaders = new Headers(req.headers);
+  if (userId) {
+    requestHeaders.set("x-clerk-user-id", userId);
+  }
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+});
 
 export default handler;

@@ -89,8 +89,10 @@ importers:
       eslint: 8.31.0
       eslint-config-next: 13.1.1
       framer-motion: ^8.0.2
+      nanoid: ^4.0.0
       next: 13.1.1
       postcss: ^8.4.20
+      prisma: workspace:^0.0.1
       react: 18.2.0
       react-dom: 18.2.0
       react-icons: ^4.7.1
@@ -116,7 +118,9 @@ importers:
       eslint: 8.31.0
       eslint-config-next: 13.1.1_iukboom6ndih5an6iafl45j2fe
       framer-motion: 8.0.2_biqbaboplfbrettd7655fr4n2y
+      nanoid: 4.0.0
       next: 13.1.1_biqbaboplfbrettd7655fr4n2y
+      prisma: link:../prisma
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-icons: 4.7.1_react@18.2.0
