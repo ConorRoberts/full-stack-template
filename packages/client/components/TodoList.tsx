@@ -25,7 +25,7 @@ const TodoList: FC<Props> = ({ todos }) => {
       <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
         {todos.map((todo) => (
           <li key={todo.id} onClick={() => deleteTodo({ todoId: todo.id })}>
-            <a href="#" className="block hover:bg-gray-50 dark:hover:bg-gray-700">
+            <div className="hover:bg-gray-50 dark:hover:bg-gray-700">
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <p className="truncate text-sm font-medium text-indigo-600 dark:text-indigo-300">{todo.title}</p>
@@ -50,7 +50,7 @@ const TodoList: FC<Props> = ({ todos }) => {
                   </div>
                 </div>
               </div>
-            </a>
+            </div>
           </li>
         ))}
       </ul>
