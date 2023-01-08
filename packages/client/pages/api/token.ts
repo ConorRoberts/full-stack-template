@@ -1,17 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { getAuth } from "@clerk/nextjs/server";
+import { NextRequest } from "next/server";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { method } = req;
+const handler = async (req: NextRequest) => {
   const { getToken } = getAuth(req);
+  return new Response(
+    JSON.stringify({
+      token: await getToken(),
+    }),
+    { status: 200 }
+  );
+};
 
-  try {
-    if (method === "GET") {
-      return res.status(200).json({ token: await getToken() });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
-  }
+export const config = {
+  runtime: "edge",
 };
 
 export default handler;

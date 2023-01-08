@@ -1,26 +1,37 @@
 import { trpc } from "~/utils/trpc";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Button } from "@conorroberts/beluga";
-import { CloseIcon, LoadingIcon } from "~/components/Icons";
+import { LoadingIcon } from "~/components/Icons";
+import TodoList from "~/components/TodoList";
 
 const Page = () => {
   const utils = trpc.useContext();
-  const { user } = useUser();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
+  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery();
 
   const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
-    onSuccess: async () => {
-      await utils.todo.getAllTodos.refetch();
-    },
-  });
-  const { mutate: deleteTodo } = trpc.todo.deleteTodo.useMutation({
-    onMutate: ({ todoId }) => {
-      utils.todo.getAllTodos.setData(undefined, (prev) => {
-        return prev?.filter((e) => e.id !== todoId) ?? prev;
+    onSuccess: async (newTodo) => {
+      const creationLatency = Date.now() - newTodo.createdAt.getTime();
+
+      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
+        prev.push(newTodo);
+        return prev.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       });
-    },
-    onSuccess: async () => {
-      await utils.todo.getAllTodos.refetch();
+
+      await utils.client.todo.reportLatency.mutate({
+        todoId: newTodo.id,
+        latency: creationLatency,
+      });
+
+      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
+        const todoIndex = prev.findIndex((e) => e.id === newTodo.id);
+
+        // Couldn't find todo
+        if (todoIndex === -1) return prev;
+
+        prev[todoIndex].creationLatency = creationLatency;
+
+        return prev;
+      });
     },
   });
 
@@ -28,23 +39,12 @@ const Page = () => {
     <>
       <SignedIn>
         <div className="flex flex-col">
-          <Button size="medium" color="green" onClick={() => mutate()} className="ml-auto">
+          <Button size="medium" color="green" onClick={() => mutate({ createdAt: new Date() })} className="ml-auto">
             <p>Create Todo</p>
             {createLoading && <LoadingIcon className="animate-spin" />}
           </Button>
-          <div className="flex flex-col gap-1 mx-auto w-full max-w-3xl">
-            {todos.map((e) => (
-              <div key={e.id} className="relative shadow-sm bg-white rounded-lg p-2 group dark:bg-gray-800">
-                <span
-                  className="absolute text-gray-400 right-1 top-1 p-0.5 hover:text-gray-500 transition cursor-pointer"
-                  onClick={() => deleteTodo({ todoId: e.id })}
-                >
-                  <CloseIcon size={20} />
-                </span>
-                <p className="font-semibold text-sm">{e.title}</p>
-                <p className="text-xs text-gray-400">Created {e.createdAt.toLocaleString()}</p>
-              </div>
-            ))}
+          <div className="mx-auto max-w-3xl w-full">
+            <TodoList todos={todos} />
           </div>
         </div>
       </SignedIn>
