@@ -11,6 +11,7 @@ import BottomNavigation from "~/components/BottomNavigation";
 import LoadingScreen from "~/components/LoadingScreen";
 import { trpc } from "../utils/trpc";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,7 @@ const App: AppType = ({ Component, pageProps }) => {
     });
   }, []);
   return (
-    <ClerkProvider {...pageProps}>
+    <SessionProvider>
       {/* Load the Inter font */}
       <style jsx global>
         {`
@@ -50,7 +51,7 @@ const App: AppType = ({ Component, pageProps }) => {
         {drawerOpen && <NavigationDrawer setOpen={setDrawerOpen} open={drawerOpen} />}
         <BottomNavigation setDrawerOpen={setDrawerOpen} />
       </div>
-    </ClerkProvider>
+    </SessionProvider>
   );
 };
 

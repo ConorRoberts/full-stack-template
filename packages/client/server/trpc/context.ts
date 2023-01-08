@@ -1,37 +1,23 @@
-import { PrismaClient } from "prisma/client/edge";
+import { prisma } from "../prisma";
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
-import { TRPCError, inferAsyncReturnType } from "@trpc/server";
-import { User } from "~/types/User";
+import { inferAsyncReturnType } from "@trpc/server";
+import { getServerAuthSession } from "../getServerAuthSession";
 
 /**
+ * This is the actual context you'll use in your router
  * @link https://trpc.io/docs/context
  **/
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
   const { req } = opts;
 
-  const prisma = new PrismaClient({
-    datasources: {
-      db: {
-        url: String(process.env.DATABASE_URL),
-      },
-    },
-  });
-
-  let user: User | null = null;
-  const userId = req.headers.get("x-clerk-user-id");
-
-  if (userId) {
-    user = {
-      id: userId,
-    };
-  } else {
-    throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" });
-  }
+  // Get the session from the server using the unstable_getServerSession wrapper function
+  const session = await getServerAuthSession();
+  console.log(session);
 
   return {
-    prisma,
-    user,
+    session,
     req,
+    prisma,
   };
 };
 

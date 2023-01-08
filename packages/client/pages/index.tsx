@@ -3,10 +3,12 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Button } from "@conorroberts/beluga";
 import { LoadingIcon } from "~/components/Icons";
 import TodoList from "~/components/TodoList";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const utils = trpc.useContext();
   const { data: todos = [] } = trpc.todo.getAllTodos.useQuery();
+  const { data: session, status: authStatus } = useSession();
 
   const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
     onSuccess: async (newTodo) => {
@@ -37,7 +39,7 @@ const Page = () => {
 
   return (
     <>
-      <SignedIn>
+      {authStatus === "authenticated" && (
         <div className="flex flex-col">
           <Button size="medium" color="green" onClick={() => mutate({ createdAt: new Date() })} className="ml-auto">
             <p>Create Todo</p>
@@ -47,10 +49,8 @@ const Page = () => {
             <TodoList todos={todos} />
           </div>
         </div>
-      </SignedIn>
-      <SignedOut>
-        <p className="my-8 text-center">You must be signed in to view this page.</p>
-      </SignedOut>
+      )}
+      {authStatus !== "authenticated" && <p className="my-8 text-center">You must be signed in to view this page.</p>}
     </>
   );
 };

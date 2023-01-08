@@ -20,10 +20,10 @@ export const publicProcedure = t.procedure;
  * Reusable middleware to ensure users are logged in. This is also useful to assert the "user" field as non-null.
  */
 const isAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.user) {
+  if (!ctx.session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  return next({ ctx: { ...ctx, user: ctx.user } });
+  return next({ ctx: { ...ctx, user: ctx.session.user } });
 });
 
 /**
