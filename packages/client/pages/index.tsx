@@ -1,12 +1,13 @@
 import { trpc } from "~/utils/trpc";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import { Button } from "@conorroberts/beluga";
 import { LoadingIcon } from "~/components/Icons";
 import TodoList from "~/components/TodoList";
 
 const Page = () => {
   const utils = trpc.useContext();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery();
+  const { user } = useUser();
+  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
 
   const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
     onSuccess: async (newTodo) => {
