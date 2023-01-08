@@ -1,7 +1,7 @@
 import { CalendarIcon } from "@heroicons/react/20/solid";
 import { inferProcedureOutput } from "@trpc/server";
 import { FC } from "react";
-import { Router } from "~/server/trpc/router/mainRouter";
+import { Router } from "~/../api/src";
 import { trpc } from "~/utils/trpc";
 
 type Props = {
