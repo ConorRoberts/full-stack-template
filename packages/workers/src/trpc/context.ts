@@ -5,7 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { PrismaClient } from "prisma/client/edge";
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { Env } from "..";
-import cookie from "cookie";
+// import cookie from "cookie";
 
 /**
  * @link https://trpc.io/docs/context
@@ -22,11 +22,12 @@ export const createContext = async ({ opts, env }: { opts: FetchCreateContextFnO
   });
 
   let user: DecodedJwt | null = null;
-  // const authHeader = req.headers.get("authorization");
-  const cookieHeader = req.headers.get("cookie");
+  const authHeader = req.headers.get("authorization");
+  // const cookieHeader = req.headers.get("cookie");
 
-  if (cookieHeader) {
-    const token = cookie.parse(cookieHeader)["__session"];
+  if (authHeader) {
+    // const token = cookie.parse(cookieHeader)["__session"];
+    const token = authHeader.substring(7)
 
     if (token) {
       try {

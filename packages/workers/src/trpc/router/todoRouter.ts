@@ -14,17 +14,20 @@ export const todoRouter = router({
     });
     return todos;
   }),
-  createTodo: protectedProcedure.mutation(async ({ ctx: { user, prisma } }) => {
-    const newTodo = await prisma.todo.create({
-      data: {
-        createdBy: user.sub,
-        title: `${nanoid()} New Todo`,
-        completed: false,
-      },
-    });
+  createTodo: protectedProcedure
+    .input(z.object({ createdAt: z.date().optional() }).optional().default({}))
+    .mutation(async ({ ctx: { user, prisma }, input: { createdAt } }) => {
+      const newTodo = await prisma.todo.create({
+        data: {
+          createdAt,
+          createdBy: user.sub,
+          title: `${nanoid()} New Todo`,
+          completed: false,
+        },
+      });
 
-    return newTodo;
-  }),
+      return newTodo;
+    }),
   deleteTodo: protectedProcedure
     .input(z.object({ todoId: z.number() }))
     .mutation(async ({ ctx: { user, prisma }, input }) => {
@@ -33,6 +36,20 @@ export const todoRouter = router({
         where: {
           id: todoId,
           createdBy: user.sub,
+        },
+      });
+    }),
+  reportLatency: protectedProcedure
+    .input(z.object({ todoId: z.number(), latency: z.number() }))
+    .mutation(async ({ ctx: { prisma, user }, input }) => {
+      const { todoId, latency } = input;
+      await prisma.todo.updateMany({
+        where: {
+          id: todoId,
+          createdBy: user.sub,
+        },
+        data: {
+          creationLatency: latency,
         },
       });
     }),

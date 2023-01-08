@@ -31,6 +31,7 @@ model Todo {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   createdBy String
+  creationLatency Float?
 
   @@index([id, createdAt, updatedAt, createdBy])
   @@map("todos")

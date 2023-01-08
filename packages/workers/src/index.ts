@@ -12,13 +12,6 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { mainRouter } from "./trpc/router/mainRouter";
 import { createContext } from "./trpc/context";
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "http://localhost:3000",
-  "Access-Control-Allow-Methods": "*",
-  "Access-Control-Allow-Headers": "Content-Type,Authorization",
-  "Access-Control-Allow-Credentials": "true",
-};
-
 export interface Env {
   // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
   // MY_KV_NAMESPACE: KVNamespace;
@@ -38,6 +31,12 @@ export interface Env {
 
 export default {
   fetch: async (request: Request, env: Env, ctx: ExecutionContext): Promise<Response> => {
+    const CORS_HEADERS = {
+      "Access-Control-Allow-Origin": "http://localhost:3000",
+      "Access-Control-Allow-Methods": "*",
+      "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
+      "Access-Control-Allow-Credentials": "true",
+    };
     return fetchRequestHandler({
       endpoint: "/trpc",
       req: request,

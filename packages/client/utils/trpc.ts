@@ -33,8 +33,8 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            // const { token } = await fetch("/api/token").then((res) => res.json());
-            return {};
+            const { token } = await fetch("/api/token").then((res) => res.json());
+            return {Authorization: token};
           },
           fetch: (url, options) => {
             return fetch(url, {

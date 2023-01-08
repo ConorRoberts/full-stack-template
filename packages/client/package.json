@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.6.15",
     "@conorroberts/beluga": "^1.0.58",
+    "@heroicons/react": "^2.0.13",
     "@next/font": "13.1.1",
     "@tanstack/react-query": "^4.20.4",
     "@trpc/client": "^10.7.0",
