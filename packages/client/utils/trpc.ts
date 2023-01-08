@@ -5,7 +5,7 @@ import superjson from "superjson";
 
 import { type Router } from "../../api/src/index";
 import { CLIENT_ENV } from "~/config/clientEnv";
-
+ 
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
     return {
