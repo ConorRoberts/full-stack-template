@@ -16,12 +16,13 @@ export const todoRouter = router({
   }),
   createTodo: protectedProcedure
     .input(z.object({ createdAt: z.date().optional() }).optional().default({}))
-    .mutation(async ({ ctx: { user, prisma } }) => {
+    .mutation(async ({ ctx: { user, prisma }, input: { createdAt } }) => {
       const newTodo = await prisma.todo.create({
         data: {
           createdBy: user.sub,
           title: `${ulid()} New Todo`,
           completed: false,
+          createdAt,
         },
       });
 
