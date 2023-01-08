@@ -14,17 +14,20 @@ export const todoRouter = router({
     });
     return todos;
   }),
-  createTodo: protectedProcedure.mutation(async ({ ctx: { user, prisma } }) => {
-    const newTodo = await prisma.todo.create({
-      data: {
-        createdBy: user.id,
-        title: `${nanoid()} New Todo`,
-        completed: false,
-      },
-    });
+  createTodo: protectedProcedure
+    .input(z.object({ createdAt: z.date().optional() }).optional().default({}))
+    .mutation(async ({ ctx: { user, prisma }, input: { createdAt } }) => {
+      const newTodo = await prisma.todo.create({
+        data: {
+          createdAt,
+          createdBy: user.id,
+          title: `${nanoid()} New Todo`,
+          completed: false,
+        },
+      });
 
-    return newTodo;
-  }),
+      return newTodo;
+    }),
   deleteTodo: protectedProcedure
     .input(z.object({ todoId: z.number() }))
     .mutation(async ({ ctx: { user, prisma }, input }) => {

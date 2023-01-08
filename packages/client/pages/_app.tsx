@@ -42,7 +42,7 @@ const App: AppType = ({ Component, pageProps }) => {
 
       <div
         className={
-          "relative flex min-h-screen flex-col bg-gray-100 px-2 pb-24 pt-2 text-black dark:bg-gray-900 dark:text-white md:pt-[70px] md:pb-2"
+          "relative flex min-h-screen flex-col bg-white px-2 pb-24 pt-2 text-black dark:bg-gray-900 dark:text-white md:pt-[70px] md:pb-2"
         }
       >
         <TopNavigation setDrawerOpen={setDrawerOpen} />

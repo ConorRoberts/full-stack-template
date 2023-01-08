@@ -72,7 +72,8 @@ importers:
   packages/client:
     specifiers:
       '@clerk/nextjs': ^4.6.15
-      '@conorroberts/beluga': ^1.0.58
+      '@conorroberts/beluga': ^1.0.59
+      '@heroicons/react': ^2.0.13
       '@next/font': 13.1.1
       '@tanstack/react-query': ^4.20.4
       '@trpc/client': ^10.7.0
@@ -102,7 +103,8 @@ importers:
       zod: ^3.18.0
     dependencies:
       '@clerk/nextjs': 4.6.15_3gmkx3gorc7gzu273x7wlum7sy
-      '@conorroberts/beluga': 1.0.58_ib3m5ricvtkl2cll7qpr2f6lvq
+      '@conorroberts/beluga': 1.0.59_ib3m5ricvtkl2cll7qpr2f6lvq
+      '@heroicons/react': 2.0.13_react@18.2.0
       '@next/font': 13.1.1
       '@tanstack/react-query': 4.20.4_biqbaboplfbrettd7655fr4n2y
       '@trpc/client': 10.7.0_@trpc+server@10.7.0
@@ -368,8 +370,8 @@ packages:
     resolution: {integrity: sha512-BNV2wN8V6Zduvo7UzxcdjBbLQ906D2KhS804PDufLgx/sanGJCHVJMOIaLvS/b61JKtot1U7P/l1fjrjZ7/E3A==}
     dev: true
 
-  /@conorroberts/beluga/1.0.58_ib3m5ricvtkl2cll7qpr2f6lvq:
-    resolution: {integrity: sha512-4DMVt19F2DTiUJXj0W1R4VNwaJYyl+aUAUnHPLtttt90mhj9D1g5bBwfMS8n/yUXGVZslpcbGVvf+xIs4SnkKg==}
+  /@conorroberts/beluga/1.0.59_ib3m5ricvtkl2cll7qpr2f6lvq:
+    resolution: {integrity: sha512-hV1s8J5z1J8asgxr8EPpOTKD8u0qymw2HxcOfDchEEgJ7aD/0jV8g8ScOyF9Ps7ypnbYP/DSqWsmCM06XuW6aQ==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -497,6 +499,14 @@ packages:
       use-isomorphic-layout-effect: 1.1.2_kzbn2opkn2327fwg5yzwzya5o4
     transitivePeerDependencies:
       - '@types/react'
+    dev: false
+
+  /@heroicons/react/2.0.13_react@18.2.0:
+    resolution: {integrity: sha512-iSN5XwmagrnirWlYEWNPdCDj9aRYVD/lnK3JlsC9/+fqGF80k8C7rl+1HCvBX0dBoagKqOFBs6fMhJJ1hOg1EQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.11.8:
