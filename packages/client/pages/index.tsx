@@ -27,7 +27,12 @@ const Page = () => {
     <>
       <SignedIn>
         <div className="flex flex-col">
-          <Button size="medium" color="green" onClick={() => mutateAsync({ createdAt: new Date() })} className="ml-auto">
+          <Button
+            size="medium"
+            color="green"
+            onClick={() => mutateAsync({ createdAt: new Date() })}
+            className="ml-auto"
+          >
             <p>Create Todo</p>
             {createLoading && <LoadingIcon className="animate-spin" />}
           </Button>

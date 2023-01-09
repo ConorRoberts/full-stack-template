@@ -1,11 +1,11 @@
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { httpLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
 import { type Router } from "../../api/src/index";
 import { CLIENT_ENV } from "~/config/clientEnv";
- 
+
 export const trpc = createTRPCNext<Router>({
   config({ ctx }) {
     return {
@@ -15,8 +15,8 @@ export const trpc = createTRPCNext<Router>({
           enabled: (opts) =>
             process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
-        httpBatchLink({
-          url: `${CLIENT_ENV.API_URL}/trpc`,
+        httpLink({
+          url: `${CLIENT_ENV.WEBSITE_URL}/api/trpc`,
           headers: async () => {
             if (ctx?.req) {
               // To use SSR properly, you need to forward the client's headers to the server
@@ -33,8 +33,8 @@ export const trpc = createTRPCNext<Router>({
                 "x-ssr": "1",
               };
             }
-            const { token } = await fetch("/api/token").then((res) => res.json());
-            return { Authorization: `Bearer ${token}` };
+
+            return {};
           },
         }),
       ],

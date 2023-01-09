@@ -25,9 +25,9 @@ export const CLIENT_ENV = z
     API_URL: process.env.NEXT_PUBLIC_API_URL,
 
     /**
-     * The URL at which this application is hosted 
+     * The URL at which this application is hosted
      */
-    WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL,
+    WEBSITE_URL: process.env.NEXT_PUBLIC_WEBSITE_URL ?? process.env.VERCEL_URL,
 
     /**
      * Clerk frontend API URL.
