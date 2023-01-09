@@ -7,14 +7,13 @@ import TodoList from "~/components/TodoList";
 const Page = () => {
   const utils = trpc.useContext();
 
-  const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
-    onSuccess: async (newTodo) => {
-      const creationLatency = Date.now() - newTodo.createdAt.getTime();
+  const { mutateAsync, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
+    onSuccess: async (newTodo, variables) => {
+      const creationLatency = Date.now() - (variables?.createdAt?.getTime() ?? newTodo.createdAt.getTime());
 
-      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
-        prev.push({ ...newTodo, creationLatency });
-        return prev.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      });
+      utils.todo.getAllTodos.setData(undefined, (prev = []) =>
+        [...prev, { ...newTodo, creationLatency }].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      );
 
       // Report latency
       await utils.client.todo.reportLatency.mutate({
@@ -28,7 +27,7 @@ const Page = () => {
     <>
       <SignedIn>
         <div className="flex flex-col">
-          <Button size="medium" color="green" onClick={() => mutate({ createdAt: new Date() })} className="ml-auto">
+          <Button size="medium" color="green" onClick={() => mutateAsync({ createdAt: new Date() })} className="ml-auto">
             <p>Create Todo</p>
             {createLoading && <LoadingIcon className="animate-spin" />}
           </Button>
