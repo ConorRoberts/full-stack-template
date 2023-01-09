@@ -32,7 +32,7 @@ export interface Env {
 export default {
   fetch: async (request: Request, env: Env, ctx: ExecutionContext): Promise<Response> => {
     const CORS_HEADERS = {
-      "Access-Control-Allow-Origin": "http://localhost:3000",
+      "Access-Control-Allow-Origin": env.CLIENT_URL,
       "Access-Control-Allow-Methods": "*",
       "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
       "Access-Control-Allow-Credentials": "true",
