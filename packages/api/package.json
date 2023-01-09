@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev onchange -i -k \"src/**\" \".env\" \"tsconfig.json\" -- ts-node -r dotenv/config src/listen.ts",
     "start": "cross-env NODE_ENV=prod node -r dotenv/config dist/listen.js",
-    "test": "vitest",
-    "build": "tsc"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",

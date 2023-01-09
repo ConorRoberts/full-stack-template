@@ -3,11 +3,11 @@ import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
-import { type Router } from "../../api/src/index";
+import { type Router } from "../../workers/src/trpc/router/mainRouter";
 import { CLIENT_ENV } from "~/config/clientEnv";
 
 export const trpc = createTRPCNext<Router>({
-  config({ ctx }) {
+  config: ({ ctx }) => {
     return {
       transformer: superjson,
       links: [
@@ -34,7 +34,7 @@ export const trpc = createTRPCNext<Router>({
               };
             }
             const { token } = await fetch("/api/token").then((res) => res.json());
-            return {Authorization: token};
+            return { Authorization: token };
           },
           fetch: (url, options) => {
             return fetch(url, {
