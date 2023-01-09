@@ -1,37 +1,25 @@
 import { trpc } from "~/utils/trpc";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { Button } from "@conorroberts/beluga";
 import { LoadingIcon } from "~/components/Icons";
 import TodoList from "~/components/TodoList";
 
 const Page = () => {
   const utils = trpc.useContext();
-  const { user } = useUser();
-  const { data: todos = [] } = trpc.todo.getAllTodos.useQuery(undefined, { enabled: Boolean(user) });
 
   const { mutate, isLoading: createLoading } = trpc.todo.createTodo.useMutation({
     onSuccess: async (newTodo) => {
       const creationLatency = Date.now() - newTodo.createdAt.getTime();
 
       utils.todo.getAllTodos.setData(undefined, (prev = []) => {
-        prev.push(newTodo);
+        prev.push({ ...newTodo, creationLatency });
         return prev.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       });
 
+      // Report latency
       await utils.client.todo.reportLatency.mutate({
         todoId: newTodo.id,
         latency: creationLatency,
-      });
-
-      utils.todo.getAllTodos.setData(undefined, (prev = []) => {
-        const todoIndex = prev.findIndex((e) => e.id === newTodo.id);
-
-        // Couldn't find todo
-        if (todoIndex === -1) return prev;
-
-        prev[todoIndex].creationLatency = creationLatency;
-
-        return prev;
       });
     },
   });
@@ -45,7 +33,7 @@ const Page = () => {
             {createLoading && <LoadingIcon className="animate-spin" />}
           </Button>
           <div className="mx-auto max-w-3xl w-full">
-            <TodoList todos={todos} />
+            <TodoList />
           </div>
         </div>
       </SignedIn>
