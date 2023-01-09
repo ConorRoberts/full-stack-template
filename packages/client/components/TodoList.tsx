@@ -1,15 +1,10 @@
 import { CalendarIcon } from "@heroicons/react/20/solid";
-import { inferProcedureOutput } from "@trpc/server";
-import { FC } from "react";
-import { Router } from "~/../api/src";
 import { trpc } from "~/utils/trpc";
 
-type Props = {
-  todos: inferProcedureOutput<Router["todo"]["getAllTodos"]>;
-};
-
-const TodoList: FC<Props> = ({ todos }) => {
+const TodoList = () => {
   const utils = trpc.useContext();
+
+   const { data: todos = [] } = trpc.todo.getAllTodos.useQuery();
   const { mutate: deleteTodo } = trpc.todo.deleteTodo.useMutation({
     onMutate: ({ todoId }) => {
       utils.todo.getAllTodos.setData(undefined, (prev = []) => {
