@@ -4,9 +4,6 @@ import { getValidatedJwt } from "../utils/getValidatedJwt";
 import { type DecodedJwt } from "../types/DecodedJwt";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { PrismaClient } from "prisma";
-
-const prisma = new PrismaClient();
 
 /**
  * @link https://trpc.io/docs/context
@@ -30,7 +27,6 @@ export const createContext = async (opts: CreateFastifyContextOptions) => {
   }
 
   return {
-    prisma,
     user,
     req,
     res,

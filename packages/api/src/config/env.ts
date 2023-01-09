@@ -9,6 +9,7 @@ export const ENV = z
     STAGE: z.enum(["dev", "prod"]),
     CLERK_API_KEY: z.string(),
     CLIENT_URL: z.string(),
+    DATABASE_URL: z.string(),
   })
   .parse({
     /**
@@ -30,4 +31,5 @@ export const ENV = z
      * The URL of the client app (within ./packages/client)
      */
     CLIENT_URL: process.env.CLIENT_URL,
+    DATABASE_URL: process.env.DATABASE_URL,
   });
