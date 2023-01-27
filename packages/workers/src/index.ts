@@ -40,6 +40,7 @@ export default {
     return fetchRequestHandler({
       endpoint: "/trpc",
       req: request,
+      batching: { enabled: true },
       router: mainRouter,
       responseMeta: ({ errors }) => {
         return {
