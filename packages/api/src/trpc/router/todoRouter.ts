@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { ulid } from "ulid";
 import { protectedProcedure, router } from "../trpc";
 import { z } from "zod";
 
@@ -21,7 +21,7 @@ export const todoRouter = router({
         data: {
           createdAt,
           createdBy: user.sub,
-          title: `${nanoid()} New Todo`,
+          title: `${ulid()} New Todo`,
           completed: false,
         },
       });

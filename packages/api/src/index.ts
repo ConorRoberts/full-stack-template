@@ -4,7 +4,6 @@ import type { Router } from "./trpc/router";
 import { mainRouter as router } from "./trpc/router";
 import { createContext } from "./trpc/context";
 import cors from "@fastify/cors";
-import { ENV } from "./config/env";
 
 const server = fastify({
   maxParamLength: 5000,
