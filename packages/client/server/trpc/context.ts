@@ -2,12 +2,15 @@ import { PrismaClient } from "prisma/client/edge";
 import { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { TRPCError, inferAsyncReturnType } from "@trpc/server";
 import { User } from "~/types/User";
+import { getAuthEdge } from "@clerk/nextjs/dist/server/getAuthEdge";
 
 /**
  * @link https://trpc.io/docs/context
  **/
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
   const { req } = opts;
+
+  const auth = getAuthEdge(req)
 
   const prisma = new PrismaClient({
     datasources: {
@@ -18,7 +21,7 @@ export const createContext = async (opts: FetchCreateContextFnOptions) => {
   });
 
   let user: User | null = null;
-  const userId = req.headers.get("x-clerk-user-id");
+  const userId = auth.userId;
 
   if (userId) {
     user = {
